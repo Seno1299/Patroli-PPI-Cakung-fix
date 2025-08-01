@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Validasi Lokasi Patroli</title>
+  <title>Absensi Patroli Satpam</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body { font-family: Arial, sans-serif; text-align: center; padding: 40px; }
+    h2 { color: #333; }
     a.button {
       display: inline-block;
       background: #2e8b57;
@@ -15,6 +16,7 @@
       font-size: 18px;
       margin-top: 20px;
     }
+    #status { margin-top: 20px; font-size: 16px; }
   </style>
 </head>
 <body>
@@ -22,13 +24,17 @@
   <p id="status">📍 Mengambil lokasi GPS...</p>
 
   <script>
-    // Ambil parameter dari URL QR Code
-    const formLink = "https://forms.gle/oeS5T16gTMRhd3rC6"; 
-    const targetLat = parseFloat(urlParams.get("lat")) || −6.183333;
-    const targetLng = parseFloat(urlParams.get("lng")) || 106.931778;
-    const posName = urlParams.get("pos") || "1B";
-    const maxDistance = 5; // meter
+    // Link Google Form
+    const formLink = "https://forms.gle/oeS5T16gTMRhd3rC6";
 
+    // Titik koordinat target
+    const targetLat = -6.183333;
+    const targetLng = 106.931778;
+
+    // Radius maksimum (meter)
+    const maxDistance = 5;
+
+    // Periksa dukungan GPS
     if (!navigator.geolocation) {
       document.getElementById("status").innerText = "⚠️ Perangkat tidak mendukung GPS.";
     } else {
@@ -39,33 +45,32 @@
       });
     }
 
+    // Jika GPS berhasil
     function showPosition(position) {
       const userLat = position.coords.latitude;
       const userLng = position.coords.longitude;
       const distance = hitungJarak(userLat, userLng, targetLat, targetLng);
 
-      alert(`Koordinat kamu: ${userLat}, ${userLng}\nKoordinat target: ${targetLat}, ${targetLng}\nJarak: ${distance.toFixed(1)} m`);
-      
       if (distance <= maxDistance) {
-        const fullFormLink = `${formLink}?usp=pp_url&entry.1111111111=${posName}&entry.2222222222=${userLat},${userLng}`;
         document.getElementById("status").innerHTML = `
-          ✅ Lokasi valid (${distance.toFixed(1)} m)<br>
-          <a href="${fullFormLink}" class="button" target="_blank">Isi Absensi</a>`;
+          ✅ Lokasi valid (${distance.toFixed(2)} m dari titik).<br>
+          <a href="${formLink}" class="button" target="_blank">Isi Absensi</a>`;
       } else {
         document.getElementById("status").innerHTML = `
-          ❌ Kamu berada terlalu jauh dari titik pos.<br>
-          Jarak: ${distance.toFixed(1)} meter<br>
+          ❌ Kamu berada di luar lokasi.<br>
+          Jarak dari titik: ${distance.toFixed(2)} meter.<br>
           Silakan dekati lokasi.`;
       }
     }
 
+    // Jika GPS gagal
     function showError(error) {
       document.getElementById("status").innerText = "❗ Gagal mengambil lokasi. Aktifkan GPS dan coba lagi.";
     }
 
-    // Rumus haversine untuk hitung jarak
+    // Rumus haversine
     function hitungJarak(lat1, lon1, lat2, lon2) {
-      const R = 6371e3;
+      const R = 6371e3; // meter
       const toRad = angle => angle * Math.PI / 180;
       const dLat = toRad(lat2 - lat1);
       const dLon = toRad(lon2 - lon1);
