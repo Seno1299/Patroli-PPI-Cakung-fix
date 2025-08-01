@@ -40,6 +40,7 @@
     }
 
     function showPosition(position) {
+      const urlParams = new URLSearchParams(window.location.search);
       const userLat = position.coords.latitude;
       const userLng = position.coords.longitude;
       const distance = hitungJarak(userLat, userLng, targetLat, targetLng);
