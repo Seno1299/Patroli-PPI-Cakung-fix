@@ -24,7 +24,7 @@
   <script>
     // Ambil parameter dari URL QR Code
     const urlParams = new URLSearchParams(window.location.search);
-    const formLink = "https://forms.gle/obt6SK2bxRKP4ehz7"; // Ganti dengan link form Anda
+    const formLink = "https://forms.gle/oeS5T16gTMRhd3rC6"; 
     const targetLat = parseFloat(urlParams.get("lat")) || −6.183333;
     const targetLng = parseFloat(urlParams.get("lng")) || 106.931778;
     const posName = urlParams.get("pos") || "1B";
