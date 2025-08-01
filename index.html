@@ -23,7 +23,6 @@
 
   <script>
     // Ambil parameter dari URL QR Code
-    const urlParams = new URLSearchParams(window.location.search);
     const formLink = "https://forms.gle/oeS5T16gTMRhd3rC6"; 
     const targetLat = parseFloat(urlParams.get("lat")) || −6.183333;
     const targetLng = parseFloat(urlParams.get("lng")) || 106.931778;
@@ -45,6 +44,8 @@
       const userLng = position.coords.longitude;
       const distance = hitungJarak(userLat, userLng, targetLat, targetLng);
 
+      alert(`Koordinat kamu: ${userLat}, ${userLng}\nKoordinat target: ${targetLat}, ${targetLng}\nJarak: ${distance.toFixed(1)} m`);
+      
       if (distance <= maxDistance) {
         const fullFormLink = `${formLink}?usp=pp_url&entry.1111111111=${posName}&entry.2222222222=${userLat},${userLng}`;
         document.getElementById("status").innerHTML = `
